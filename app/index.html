@@ -47,12 +47,28 @@
         <a class="active item" ui-sref="home" ui-sref-active="active">
           Home
         </a>
+        <a class="item" ui-sref="customerList" ui-sref-active="active">
+          Clientes
+        </a>
+        <a class="item" ui-sref="productList" ui-sref-active="active">
+          Produtos
+        </a>
+        <a class="item" ui-sref="inventoryList" ui-sref-active="active">
+          Registrar Entrada / Saida
+        </a>
+        <a class="item" ui-sref="sell" ui-sref-active="active">
+          Vendas
+        </a>
       </div>
     </div>
     <div class="contentContainer" ui-view></div>
 
     <script src="scripts/app.js"></script>
     <script src="scripts/controllers/homeController.js"></script>
+    <script src="scripts/controllers/customer/customerListController.js"></script>
+    <script src="scripts/controllers/customer/newCustomerController.js"></script>
+    <script src="scripts/controllers/product/productListController.js"></script>
+    <script src="scripts/controllers/product/newProductController.js"></script>
 
     <script src="scripts/services/DbService.js"></script>
   </body>

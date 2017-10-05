@@ -1,6 +1,6 @@
-angular.module('tadanan').factory('DbService', function() {
+angular.module('storecontrol').factory('DbService', function() {
 
-    var dbPath = process.env.APPDATA + '/tadanan';
+    var dbPath = process.env.APPDATA + '/storecontrol';
     //var dbPath = 'data';
 
 	var fs = require('fs');
@@ -24,8 +24,12 @@ angular.module('tadanan').factory('DbService', function() {
       return oDatabaseService.db;
 	};
 
-	oDatabaseService.getQuestionnaireCollection = function() {
-      return this.getDb().collection("questionnaire");
+	oDatabaseService.getCustomerCollection = function() {
+      return this.getDb().collection("customer");
+	};
+
+  oDatabaseService.getProductCollection = function() {
+      return this.getDb().collection("product");
 	};
 
 	return oDatabaseService;

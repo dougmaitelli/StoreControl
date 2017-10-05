@@ -1,0 +1,17 @@
+<div class="ui right floated pagination menu">
+  <a class="icon item" ng-class="currentPage === 1 ? 'disabled' : ''" ng-click="prevPage();">
+    <i class="left chevron icon"></i>
+  </a>
+  <div class="disabled item" ng-show="currentPage > (pageRangeToDisplay + 1)">
+    ...
+  </div>
+  <a class="item" ng-class="currentPage === pageIndex ? 'active' : ''" ng-repeat="pageIndex in getPageArrayRange()" ng-click="updatePage(pageIndex);">
+    {{pageIndex}}
+  </a>
+  <div class="disabled item" ng-show="currentPage < (totalPages - pageRangeToDisplay)">
+    ...
+  </div>
+  <a class="icon item" ng-class="currentPage === totalPages ? 'disabled' : ''" ng-click="nextPage();">
+    <i class="right chevron icon"></i>
+  </a>
+</div>

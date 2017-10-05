@@ -1,0 +1,55 @@
+<div class="ui container contentContainerInner">
+  <div class="ui segment">
+    <form class="ui form">
+      <div class="two fields">
+        <div class="field">
+          <label>CPF</label>
+          <input type="text" name="cpf" class="mask cpf" ng-model="searchTerms.cpf" placeholder="CPF">
+        </div>
+        <div class="field">
+          <label>Nome</label>
+          <input type="text" name="name" ng-model="searchTerms.name" placeholder="Nome">
+        </div>
+      </div>
+      <button class="ui button" ng-click="doSearch();">Buscar</button>
+      <a class="ui right floated small primary labeled icon button" ui-sref="newCustomer">
+        <i class="user icon"></i> Novo
+      </a>
+    </form>
+  </div>
+
+  <div class="ui dimmable resultTable" ng-show="totalPages > 0">
+    <div class="ui inverted dimmer loadingIndicator">
+      <div class="ui active text loader">Loading</div>
+    </div>
+    <table class="ui celled table">
+      <thead>
+        <tr>
+          <th>CPF</th>
+          <th>Nome</th>
+          <th>Sobrenome</th>
+          <th>Acoes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="result in searchResults">
+          <td><a ui-sref="editCustomer({id: result._id})">{{result.cpf}}</a></td>
+          <td>{{result.name}}</td>
+          <td>{{result.lastname}}</td>
+          <td>
+            <button class="ui icon red button" ng-click="delete(result._id);">
+              <i class="trash icon"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th colspan="4">
+            <ng-include src="'views/components/pagination.html'"/>
+          </th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
