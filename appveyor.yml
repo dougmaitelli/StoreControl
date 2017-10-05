@@ -1,0 +1,18 @@
+platform:
+  - x86
+
+cache:
+  - node_modules
+
+init:
+  - git config --global core.autocrlf input
+
+install:
+  - npm i -g npm@5.2.0
+  - npm install -g electron-packager
+  - npm install
+
+build_script:
+  - node --version
+  - npm --version
+  - npm run package

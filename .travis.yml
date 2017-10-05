@@ -11,7 +11,7 @@ before_install:
 
 before_script:
   - npm install -g electron-packager
-script: npm run package
+script: npm run npm run pack-mac && npm run pack-linux
 
 deploy:
   provider: releases
