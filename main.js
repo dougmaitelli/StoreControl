@@ -1,3 +1,9 @@
+const electron = require('electron')
+// Module to control application life.
+const app = electron.app
+
+const debug = /--debug/.test(process.argv[2])
+
 const handleSquirrelEvent = () => {
   if (process.argv.length === 1) {
     return false;
@@ -22,14 +28,6 @@ if (handleSquirrelEvent()) {
   return;
 }
 
-const electron = require('electron')
-// Module to control application life.
-const app = electron.app
-// Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow
-
-const debug = /--debug/.test(process.argv[2])
-
 const GhReleases = require('electron-gh-releases')
 
 let options = {
@@ -53,6 +51,9 @@ updater.on('update-downloaded', (info) => {
   // Restart the app and install the update
   updater.install()
 })
+
+// Module to create native browser window.
+const BrowserWindow = electron.BrowserWindow
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
