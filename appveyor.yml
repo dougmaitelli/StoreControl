@@ -1,0 +1,52 @@
+version: "{build}"
+
+platform:
+  - x64
+
+environment:
+  nodejs_version: "8"
+
+skip_tags: false
+
+cache:
+  - node_modules
+  - '%APPDATA%\npm-cache'
+  - '%APPVEYOR_BUILD_FOLDER%\release'
+
+install:
+  - ps: $env:package_version = (Get-Content -Raw -Path package.json | ConvertFrom-Json).version
+  - ps: Update-AppveyorBuild -Version "$env:package_version-$env:APPVEYOR_BUILD_NUMBER"
+  - ps: Install-Product node $env:nodejs_version
+  - npm i -g npm@5.2.0
+  - npm install -g electron-packager
+  - npm install
+
+build_script:
+  - node --version
+  - npm --version
+  - npm run pack-win && node ./script/installer.js
+
+artifacts:
+  - path: README.md
+    type: file
+  - path: release\StoreControl-win32-ia32\
+    type: zip
+  - path: release\installer\StoreControlSetup.exe
+    type: file
+  - path: release\installer\RELEASES
+  - path: release\installer\**\*.nupkg
+
+deploy:
+- provider: GitHub
+  tag: "$env:package_version"
+  auth_token:
+    secure: ObLpbxWfj03jaKLe6RxHD7gwOqShvanaxxTPI1Eh20F+WzEqeaaUOeSTPXP8P1GJ
+  on:
+    branch: master
+    appveyor_repo_tag: true
+
+test: off
+
+branches:
+    only:
+      - master
