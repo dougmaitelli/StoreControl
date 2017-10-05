@@ -1,5 +1,3 @@
-if (require('electron-squirrel-startup')) return;
-
 const handleSquirrelEvent = () => {
   if (process.argv.length === 1) {
     return false;
