@@ -7,6 +7,7 @@ environment:
   nodejs_version: "8"
 
 skip_tags: false
+skip_non_tags: true
 
 cache:
   - node_modules
@@ -42,7 +43,7 @@ artifacts:
 
 deploy:
 - provider: GitHub
-  tag: "$env:package_version"
+  tag: "%package_version%"
   auth_token:
     secure: ObLpbxWfj03jaKLe6RxHD7gwOqShvanaxxTPI1Eh20F+WzEqeaaUOeSTPXP8P1GJ
   on:
