@@ -1,4 +1,4 @@
 node_modules
-bower_components/
+electron-packager/
 data/
-out/
+release/

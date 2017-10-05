@@ -1,0 +1,27 @@
+language: node_js
+node_js:
+  - "8"
+
+cache:
+  directories:
+    - "node_modules"
+
+before_install:
+  - npm i -g npm@5.2.0
+
+before_script:
+  - npm install -g electron-packager
+script: npm run package
+
+deploy:
+  provider: releases
+  api_key: $GITPERM
+  skip_cleanup: true
+  file:
+    - "README.md"
+    - "release/StoreControl-darwin-x64"
+    - "release/StoreControl-win32-ia32"
+    - "release/StoreControl-linux-x64"
+    - "release/installer/StoreControlSetup.exe"
+  on:
+tags: true
