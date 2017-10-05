@@ -25,6 +25,10 @@ build_script:
   - node --version
   - npm --version
   - npm run pack-win && node ./script/installer.js
+  - mkdir releaseNew
+  - ps: mv "release\\installer\\StoreControl-$env:package_version-*.nupkg" releaseNew\
+  - rm release/installer/*.nupkg
+  - mv releaseNew/*.nupkg release/installer/
 
 artifacts:
   - path: README.md
