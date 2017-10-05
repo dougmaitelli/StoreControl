@@ -19,6 +19,16 @@ build_script:
   - npm --version
   - npm run package
 
+artifacts:
+  - path: README.md
+    type: file
+  - path: release\StoreControl-win32-ia32\
+    type: zip
+  - path: release\StoreControl-linux-x64\
+    type: zip
+  - path: release\installer\StoreControlSetup.exe
+    type: file
+
 test: off
 
 branches:
