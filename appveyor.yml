@@ -1,13 +1,11 @@
-version: 0.1.{build}
+version: 1.0.{build}
 
 platform:
   - x64
 
 cache:
   - node_modules
-
-init:
-  - git config --global core.autocrlf input
+  - '%APPDATA%\npm-cache'
 
 install:
   - npm i -g npm@5.2.0
@@ -28,6 +26,19 @@ artifacts:
     type: zip
   - path: release\installer\StoreControlSetup.exe
     type: file
+  - path: release\installer\**\*.nupkg
+
+nuget:
+  project_feed: true
+
+deploy:
+- provider: GitHub
+  tag: v$(appveyor_build_version)
+  auth_token:
+    secure: ObLpbxWfj03jaKLe6RxHD7gwOqShvanaxxTPI1Eh20F+WzEqeaaUOeSTPXP8P1GJ
+  on:
+    branch: master
+    appveyor_repo_tag: true
 
 test: off
 
