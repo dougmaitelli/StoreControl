@@ -1,7 +1,7 @@
 {
   "name": "StoreControl",
   "productName": "StoreControl",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "StoreControl",
   "repository": "https://github.com/dougmaitelli/StoreControl",
   "license": "",
@@ -19,14 +19,15 @@
   "author": "Douglas Maitelli",
   "homepage": "",
   "dependencies": {
-    "tingodb": "^0.4.0",
-    "jquery": "^3.2.1",
-    "angular": "^1.4.6",
     "@uirouter/angularjs": "^1.0.7",
+    "angular": "^1.4.6",
+    "chart.js": "^2.6.0",
+    "electron-gh-releases": "^2.0.4",
+    "jquery": "^3.2.1",
+    "jquery-mask-plugin": "^1.14.11",
     "semantic-ui-css": "^2.2.12",
     "sweetalert": "^1.1.3",
-    "jquery-mask-plugin": "^1.14.11",
-    "chart.js": "^2.6.0"
+    "tingodb": "^0.4.0"
   },
   "devDependencies": {
     "electron": "^1.7.5",
