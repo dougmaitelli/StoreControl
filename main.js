@@ -52,6 +52,11 @@ updater.on('update-downloaded', (info) => {
   updater.install()
 })
 
+updater.on('error', (err) => {
+  const {dialog} = require('electron')
+  dialog.showMessageBox({message: JSON.stringify(err), buttons: ["OK"]});
+})
+
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
 
@@ -70,9 +75,6 @@ function createWindow () {
     // Open the DevTools.
     mainWindow.webContents.openDevTools()
   }
-
-  const {dialog} = require('electron')
-  dialog.showMessageBox({message: "The file has been saved! :-)", buttons: ["OK"]});
 
   mainWindow.maximize()
 
