@@ -71,6 +71,9 @@ function createWindow () {
     mainWindow.webContents.openDevTools()
   }
 
+  const {dialog} = require('electron')
+  dialog.showMessageBox({message: "The file has been saved! :-)", buttons: ["OK"]});
+
   mainWindow.maximize()
 
   // Emitted when the window is closed.
