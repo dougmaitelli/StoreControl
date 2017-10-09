@@ -1,36 +1,24 @@
 angular.module('storecontrol').factory('DbService', function() {
 
-    var dbPath = process.env.APPDATA + '/storecontrol';
-    //var dbPath = 'data';
+  var dbPath = process.env.APPDATA + '/storecontrol/';
 
-	var fs = require('fs');
-	var Engine = require('tingodb')();
+  var Datastore = require('nedb');
 
-	var oDatabaseService = {
-	  db: null
-	};
+  var oDatabaseService = {
+    db: []
+  };
 
-	oDatabaseService.getDb = function() {
-      if (!oDatabaseService.db) {
-        try {
-          fs.accessSync(dbPath, fs.F_OK);
-	    } catch (e) {
-	      fs.mkdirSync(dbPath);
-	    }
+  oDatabaseService.getDb = function(collectionName) {
+    if (!oDatabaseService.db[collectionName]) {
+      oDatabaseService.db[collectionName] = new Datastore({filename: dbPath + collectionName + '.db',  autoload: true});
+    }
 
-        oDatabaseService.db = new Engine.Db(dbPath, {});
-      }
+    return oDatabaseService.db[collectionName];
+  };
 
-      return oDatabaseService.db;
-	};
+  oDatabaseService.getCollection = function(collectionName) {
+      return this.getDb(collectionName);
+  };
 
-	oDatabaseService.getCustomerCollection = function() {
-      return this.getDb().collection("customer");
-	};
-
-  oDatabaseService.getProductCollection = function() {
-      return this.getDb().collection("product");
-	};
-
-	return oDatabaseService;
+  return oDatabaseService;
 });

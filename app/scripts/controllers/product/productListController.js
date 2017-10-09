@@ -1,6 +1,6 @@
 angular.module('storecontrol').controller('ProductListController', ['$scope', '$timeout', 'DbService', function($scope, $timeout, DbService) {
 
-  var collection = DbService.getProductCollection();
+  var collection = DbService.getCollection('products');
 
   $scope.searchTerms = {};
   $scope.searchResults = [];
@@ -62,7 +62,7 @@ angular.module('storecontrol').controller('ProductListController', ['$scope', '$
 
     $(".resultTable .loadingIndicator").addClass("active");
 
-    collection.find(processedTerms).skip($scope.totalPerPage * ($scope.currentPage - 1)).limit($scope.totalPerPage).toArray(function(err, items) {
+    collection.find(processedTerms).skip($scope.totalPerPage * ($scope.currentPage - 1)).limit($scope.totalPerPage).exec(function(err, items) {
       $timeout(function() {
         $scope.searchResults = items;
 

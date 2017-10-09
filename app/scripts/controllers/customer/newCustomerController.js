@@ -1,6 +1,6 @@
 angular.module('storecontrol').controller('NewCustomerController', ['$scope', '$timeout', '$stateParams', '$state', 'DbService', function($scope, $timeout, $stateParams, $state, DbService) {
 
-  var collection = DbService.getCustomerCollection();
+  var collection = DbService.getCollection('customers');
 
   $scope.data = {};
 
