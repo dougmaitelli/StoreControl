@@ -1,66 +1,49 @@
-angular.module('storecontrol').controller('NewCustomerController', ['$scope', '$timeout', '$stateParams', '$state', 'DbService', function($scope, $timeout, $stateParams, $state, DbService) {
+angular.module('storecontrol').controller('NewCustomerController', ['$scope', '$controller', '$timeout', 'DbService', function($scope, $controller, $timeout, DbService) {
 
-  var collection = DbService.getCollection('customers');
-
-  $scope.data = {};
-
-  $timeout(function() {
-    $('.mask.cpf').mask('000.000.000-00', {reverse: true});
-    $('.mask.date').mask('00/00/0000');
-
-    $('#form').form({
-      onSuccess: function(evt) {
-        $scope.save();
-        evt.preventDefault();
-      },
-      fields: {
-        cnpj: {
-          identifier: 'cpf',
-          rules: [
-            {
-              type   : 'empty',
-              prompt : 'Favor informar CPF'
-            }
-          ]
-        },
-        name: {
-          identifier: 'name',
-          rules: [
-            {
-              type   : 'empty',
-              prompt : 'Favor informar Nome'
-            }
-          ]
-        },
-        lastname: {
-          identifier: 'lastname',
-          rules: [
-            {
-              type   : 'empty',
-              prompt : 'Favor informar Sobrenome'
-            }
-          ]
-        }
+  var fields = [
+    [
+      {
+        name: 'name',
+        type: 'text',
+        rules: [
+          {
+            type   : 'empty',
+            prompt : 'Favor informar Nome'
+          }
+        ]
+      },{
+        name: 'lastName',
+        type: 'text',
+        rules: [
+          {
+            type   : 'empty',
+            prompt : 'Favor informar Sobrenome'
+          }
+        ]
       }
-    });
+    ],[
+      {
+        name: 'cpf',
+        type: 'cpf',
+        rules: [
+          {
+            type   : 'empty',
+            prompt : 'Favor informar CPF'
+          }
+        ]
+      },{
+        name: 'rg',
+        type: 'number'
+      }
+    ]
+  ];
 
-    if ($stateParams.id) {
-      $(".ui.loadingIndicator").addClass("active");
-
-      collection.findOne({
-        _id: $stateParams.id
-      }, function(err, result) {
-        $timeout(function() {
-          $scope.data = result;
-
-          $timeout(function() {
-            $('.ui.dropdown').dropdown();
-            $(".ui.loadingIndicator").removeClass("active");
-          }, 100);
-        }, 0);
-      });
-    }
-  }, 0);
+  angular.extend(this, $controller('FormController', {
+    $scope: $scope,
+    $collection: DbService.getCollection('customers'),
+    $fields: fields,
+    $parentScreen: 'customerList'
+  }));
 
   $scope.calculateAge = function(birthdayStr) {
     if (!birthdayStr || birthdayStr.length < 10) {
@@ -72,53 +55,71 @@ angular.module('storecontrol').controller('NewCustomerController', ['$scope', '$
     var ageDifMs = Date.now() - birthday.getTime();
     var ageDate = new Date(ageDifMs);
     return Math.abs(ageDate.getUTCFullYear() - 1970);
-  }
-
-  $scope.save = function() {
-    if (!$('#form').form('is valid')) {
-      return;
-    }
-
-    var successCallback = function(err, result) {
-      $timeout(function() {
-        $scope.data._id = $scope.data._id;
-      }, 0);
-
-      swal({
-        title: "Sucesso!",
-        text: "Registro salvo com sucesso!",
-        type: "success"
-      }, function() {
-        $state.go("customerList");
-      });
-    };
-
-    if (!$scope.data._id) {
-      collection.insert($scope.data, successCallback);
-    } else {
-      collection.update({_id: $scope.data._id}, $scope.data, successCallback);
-    }
   };
 
-  $scope.delete = function() {
-    swal({
-      title: "Você tem certeza?",
-      text: "Esta ação não poderá ser desfeita!",
-      type: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#DD6B55",
-      confirmButtonText: "Sim, deletar!",
-      closeOnConfirm: false
-    }, function() {
-      collection.remove({_id: $scope.data._id}, function(err) {
-        swal({
-          title: "Deletado!",
-          text: "O registro foi deletado.",
-          type: "success"
-        }, function() {
-          $state.go("customerList");
-        });
+  $scope.afterLoad = function(data) {
+    $scope.generateChart();
+  };
+
+  function getExpendTotalPerMonth(month, year) {
+    var sellingsCollection = DbService.getCollection('sellings');
+
+    var totalExpends = 0;
+
+    var oDeferred = $.Deferred();
+    sellingsCollection.find({customerCpf: $scope.data.cpf, created_on: {$gte: new Date(year, month - 1, 1), $lt: new Date(year, month, 1)}}).exec(function(err, sellings) {
+      sellings.forEach(function(selling) {
+        totalExpends += selling.totalPrice;
       });
+
+      oDeferred.resolve(totalExpends);
+    });
+
+    return oDeferred.promise();
+  }
+
+  $scope.generateChart = function() {
+    var today = new Date();
+    var month = today.getMonth() + 1;
+    var year = today.getFullYear();
+
+    var calculations = [getExpendTotalPerMonth(month - 2, year), getExpendTotalPerMonth(month - 1, year), getExpendTotalPerMonth(month, year)];
+
+    $.when.apply($, calculations).then(function(totalSellings) {
+      var config = {
+          type: 'line',
+          data: {
+              labels: [(month - 2) + '/' + year, (month - 1) + '/' + year, month + '/' + year],
+              datasets: [{
+                  label: "Total Gasto",
+                  fill: true,
+                  backgroundColor: "rgb(54, 162, 235)",
+                  borderColor: "rgb(54, 162, 235)",
+                  data: [arguments[0], arguments[1], arguments[2]]
+              }]
+          },
+          options: {
+              responsive: true,
+              tooltips: {
+                  mode: 'index',
+                  intersect: false,
+              },
+              hover: {
+                  mode: 'nearest',
+                  intersect: true
+              },
+              scales: {
+                  yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                  }]
+              }
+          }
+      };
+
+      var ctx = document.getElementById("canvas").getContext("2d");
+      new Chart(ctx, config);
     });
   };
 

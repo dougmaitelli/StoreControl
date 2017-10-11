@@ -1,0 +1,29 @@
+<div class="ui dimmable container contentContainerInner">
+  <div class="ui inverted dimmer loadingIndicator">
+    <div class="ui active text loader">Loading</div>
+  </div>
+
+  <div class="ui segment">
+    <form id="form" class="ui form">
+      <div class="{{numberToWord(block.length)}} + {{(block.length == 1 ? 'field' : 'fields')}}" ng-repeat="block in fields">
+        <div class="field" ng-repeat="field in block">
+          <label>{{field.name}}</label>
+          <input ng-show="field.type == 'text'" type="text" name="{{field.name}}" ng-model="data[field.name]" placeholder="{{field.name}}" ng-readonly="field.readonly">
+          <input ng-show="field.type == 'cpf'" type="text" name="{{field.name}}" class="mask cpf" ng-model="data[field.name]" placeholder="{{field.name}}" ng-readonly="field.readonly">
+          <input ng-show="field.type == 'number'" type="text" name="{{field.name}}" class="mask number" ng-model="data[field.name]" placeholder="{{field.name}}" ng-readonly="field.readonly">
+          <input ng-show="field.type == 'date'" type="text" name="{{field.name}}" class="mask date" ng-model="data[field.name]" placeholder="{{field.name}}" ng-readonly="field.readonly">
+          <input ng-show="field.type == 'price'" type="text" name="{{field.name}}" ng-model="data[field.name]" format-as-currency placeholder="{{field.name}}" ng-readonly="field.readonly">
+          <input ng-show="field.type == 'percent'" type="text" name="{{field.name}}" class="mask percent" ng-model="data[field.name]" placeholder="{{field.name}}" ng-readonly="field.readonly">
+        </div>
+      </div>
+      <div>
+        <canvas id="canvas"></canvas>
+      </div>
+
+      <div class="ui blue submit button">Salvar</div>
+	    <div class="ui right floated red inverted button" ng-show="data._id" ng-click="delete();">Deletar</div>
+
+      <div class="ui error message"></div>
+    </form>
+  </div>
+</div>

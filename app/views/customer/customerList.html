@@ -35,7 +35,7 @@
         <tr ng-repeat="result in searchResults">
           <td><a ui-sref="editCustomer({id: result._id})">{{result.cpf}}</a></td>
           <td>{{result.name}}</td>
-          <td>{{result.lastname}}</td>
+          <td>{{result.lastName}}</td>
           <td>
             <button class="ui icon red button" ng-click="delete(result._id);">
               <i class="trash icon"></i>

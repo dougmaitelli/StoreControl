@@ -12,7 +12,7 @@ skip_non_tags: true
 cache:
   - node_modules
   - '%APPDATA%\npm-cache'
-  - '%APPVEYOR_BUILD_FOLDER%\release'
+  - '%APPVEYOR_BUILD_FOLDER%\release -> cleanup-cache.txt'
 
 install:
   - ps: $env:package_version = (Get-Content -Raw -Path package.json | ConvertFrom-Json).version
@@ -28,7 +28,7 @@ build_script:
   - npm run pack-win && node ./script/installer.js
   - mkdir releaseNew
   - ps: mv "release\\installer\\StoreControl-$env:package_version-*.nupkg" releaseNew\
-  - rm release/installer/*.nupkg
+  - rm -f release/installer/*.nupkg
   - mv releaseNew/*.nupkg release/installer/
 
 artifacts:

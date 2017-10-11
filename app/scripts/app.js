@@ -1,4 +1,4 @@
-angular.module("storecontrol", ['ui.router']).config([
+angular.module("storecontrol", ['ui.router', 'bcherny/formatAsCurrency']).config([
   '$httpProvider',
   '$stateProvider',
   '$urlRouterProvider',
@@ -24,7 +24,7 @@ angular.module("storecontrol", ['ui.router']).config([
       url: "/customer/new",
       views: {
         '': {
-          templateUrl : 'views/customer/newCustomer.html',
+          templateUrl : 'views/components/form.html',
           controller : 'NewCustomerController'
         }
       }
@@ -32,7 +32,7 @@ angular.module("storecontrol", ['ui.router']).config([
       url: "/customer/:id",
       views: {
         '': {
-          templateUrl : 'views/customer/newCustomer.html',
+          templateUrl : 'views/components/form.html',
           controller : 'NewCustomerController'
         }
       }
@@ -48,7 +48,7 @@ angular.module("storecontrol", ['ui.router']).config([
       url: "/product/new",
       views: {
         '': {
-          templateUrl : 'views/product/newProduct.html',
+          templateUrl : 'views/components/form.html',
           controller : 'NewProductController'
         }
       }
@@ -56,12 +56,32 @@ angular.module("storecontrol", ['ui.router']).config([
       url: "/product/:id",
       views: {
         '': {
-          templateUrl : 'views/product/newProduct.html',
+          templateUrl : 'views/components/form.html',
           controller : 'NewProductController'
+        }
+      }
+    }).state('newSelling', {
+      url: "/selling/new",
+      views: {
+        '': {
+          templateUrl : 'views/selling/newSelling.html',
+          controller : 'NewSellingController'
         }
       }
     });
 
 		$urlRouterProvider.otherwise('/');
   }
-]);
+]).directive('currency', function () {
+    return {
+        require: 'ngModel',
+        link: function(elem, $scope, attrs, ngModel){
+            ngModel.$formatters.push(function(val){
+                return '$' + val
+            });
+            ngModel.$parsers.push(function(val){
+                return val.replace(/^\$/, '')
+            });
+        }
+    }
+});

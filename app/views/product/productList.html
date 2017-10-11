@@ -19,14 +19,14 @@
     <table class="ui celled table">
       <thead>
         <tr>
-          <th>ID</th>
+          <th>Codigo</th>
           <th>Nome</th>
           <th>Acoes</th>
         </tr>
       </thead>
       <tbody>
         <tr ng-repeat="result in searchResults">
-          <td><a ui-sref="editProduct({id: result._id})">{{result._id}}</a></td>
+          <td><a ui-sref="editProduct({id: result._id})">{{result.code}}</a></td>
           <td>{{result.name}}</td>
           <td>
             <button class="ui icon red button" ng-click="delete(result._id);">

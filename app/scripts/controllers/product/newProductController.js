@@ -1,91 +1,146 @@
-angular.module('storecontrol').controller('NewProductController', ['$scope', '$timeout', '$stateParams', '$state', 'DbService', function($scope, $timeout, $stateParams, $state, DbService) {
+angular.module('storecontrol').controller('NewProductController', ['$scope', '$controller', '$timeout', 'DbService', function($scope, $controller, $timeout, DbService) {
 
-  var collection = DbService.getCollection('products');
-
-  $scope.data = {};
-
-  $timeout(function() {
-    $('#form').form({
-      onSuccess: function(evt) {
-        $scope.save();
-        evt.preventDefault();
-      },
-      fields: {
-        name: {
-          identifier: 'name',
-          rules: [
-            {
-              type   : 'empty',
-              prompt : 'Favor informar Nome'
-            }
-          ]
-        }
+  var fields = [
+    [
+      {
+        name: 'code',
+        type: 'number',
+        rules: [
+          {
+            type   : 'empty',
+            prompt : 'Favor informar Codigo'
+          }
+        ]
+      },{
+        name: 'name',
+        type: 'text',
+        rules: [
+          {
+            type   : 'empty',
+            prompt : 'Favor informar Nome'
+          }
+        ]
       }
-    });
+    ],[
+      {
+        name: 'category',
+        type: 'text'
+      }
+    ],[
+      {
+        name: 'cost',
+        type: 'price'
+      },{
+        name: 'sellMargin',
+        type: 'percent'
+      },{
+        name: 'price',
+        type: 'price'
+      }
+    ],[
+      {
+        name: 'totalSellings',
+        type: 'number',
+        readonly: true
+      },{
+        name: 'totalSellingsIncome',
+        type: 'price',
+        readonly: true
+      }
+    ]
+  ];
 
-    if ($stateParams.id) {
-      $(".ui.loadingIndicator").addClass("active");
+  angular.extend(this, $controller('FormController', {
+    $scope: $scope,
+    $collection: DbService.getCollection('products'),
+    $fields: fields,
+    $parentScreen: 'productList'
+  }));
 
-      collection.findOne({
-        _id: $stateParams.id
-      }, function(err, result) {
-        $timeout(function() {
-          $scope.data = result;
+  $scope.afterLoad = function(data) {
+    var sellingsCollection = DbService.getCollection('sellings');
 
-          $timeout(function() {
-            $('.ui.dropdown').dropdown();
-            $(".ui.loadingIndicator").removeClass("active");
-          }, 100);
-        }, 0);
-      });
-    }
-  }, 0);
+    data.totalSellings = 0;
+    data.totalSellingsIncome = 0;
 
-  $scope.save = function() {
-    if (!$('#form').form('is valid')) {
-      return;
-    }
-
-    var successCallback = function(err, result) {
-      $timeout(function() {
-        $scope.data._id = $scope.data._id;
-      }, 0);
-
-      swal({
-        title: "Sucesso!",
-        text: "Registro salvo com sucesso!",
-        type: "success"
-      }, function() {
-        $state.go("productList");
-      });
-    };
-
-    if (!$scope.data._id) {
-      collection.insert($scope.data, successCallback);
-    } else {
-      collection.update({_id: $scope.data._id}, $scope.data, successCallback);
-    }
-  };
-
-  $scope.delete = function() {
-    swal({
-      title: "Você tem certeza?",
-      text: "Esta ação não poderá ser desfeita!",
-      type: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#DD6B55",
-      confirmButtonText: "Sim, deletar!",
-      closeOnConfirm: false
-    }, function() {
-      collection.remove({_id: $scope.data._id}, function(err) {
-        swal({
-          title: "Deletado!",
-          text: "O registro foi deletado.",
-          type: "success"
-        }, function() {
-          $state.go("productList");
+    sellingsCollection.find({'items.productId': data._id}).exec(function(err, sellings) {
+      sellings.forEach(function(selling) {
+        selling.items.forEach(function(item) {
+          if (item.productId === data._id) {
+            data.totalSellings += item.quantity;
+            data.totalSellingsIncome += item.totalPrice;
+          }
         });
       });
+    });
+
+    $scope.generateChart();
+  };
+
+  function getSellingTotalPerMonth(month, year) {
+    var sellingsCollection = DbService.getCollection('sellings');
+
+    var totalSellings = 0;
+
+    var oDeferred = $.Deferred();
+    sellingsCollection.find({'items.productId': $scope.data._id, created_on: {$gte: new Date(year, month - 1, 1), $lt: new Date(year, month, 1)}}).exec(function(err, sellings) {
+      sellings.forEach(function(selling) {
+        selling.items.forEach(function(item) {
+          if (item.productId === $scope.data._id) {
+            totalSellings += item.quantity;
+          }
+        });
+      });
+
+      oDeferred.resolve(totalSellings);
+    });
+
+    return oDeferred.promise();
+  }
+
+  $scope.generateChart = function() {
+    var today = new Date();
+    var month = today.getMonth() + 1;
+    var year = today.getFullYear();
+
+    var calculations = [getSellingTotalPerMonth(month - 2, year), getSellingTotalPerMonth(month - 1, year), getSellingTotalPerMonth(month, year)];
+
+    $.when.apply($, calculations).then(function(totalSellings) {
+      var config = {
+          type: 'line',
+          data: {
+              labels: [(month - 2) + '/' + year, (month - 1) + '/' + year, month + '/' + year],
+              datasets: [{
+                  label: "Vendas",
+                  fill: true,
+                  backgroundColor: "rgb(54, 162, 235)",
+                  borderColor: "rgb(54, 162, 235)",
+                  data: [arguments[0], arguments[1], arguments[2]]
+              }]
+          },
+          options: {
+              responsive: true,
+              tooltips: {
+                  mode: 'index',
+                  intersect: false,
+              },
+              hover: {
+                  mode: 'nearest',
+                  intersect: true
+              },
+              scales: {
+                  yAxes: [{
+                      ticks: {
+                          beginAtZero: true,
+                          fixedStepSize: 1
+                      }
+                  }]
+              }
+          }
+      };
+
+      var ctx = document.getElementById("canvas").getContext("2d");
+      new Chart(ctx, config);
     });
   };
 
