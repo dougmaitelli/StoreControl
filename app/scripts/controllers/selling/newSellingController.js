@@ -11,10 +11,10 @@ angular.module('storecontrol').controller('NewSellingController', ['$scope', '$c
     totalPrice: 0
   };
 
-  $timeout(function() {
-    $('.mask.cpf').mask('000.000.000-00', {reverse: true});
-  }, 0);
-
+  angular.extend(this, $controller('BaseController', {
+    $scope: $scope
+  }));
+  
   $scope.search = function() {
     if (!$scope.searchTerm || $scope.searchTerm.length < 3) {
       $scope.suggestionItems = [];
@@ -51,6 +51,18 @@ angular.module('storecontrol').controller('NewSellingController', ['$scope', '$c
     var totalPrice = 0;
 
     $scope.selling.items.forEach(function(item) {
+      if (item.discount < 0) {
+        item.discount = 0;
+      }
+
+      if (item.discount > 100) {
+        item.discount = 100;
+      }
+
+      if (item.quantity < 1) {
+        item.quantity = 1;
+      }
+
       item.totalPrice = (item.price - (item.price * item.discount / 100)) * item.quantity;
       totalPrice += item.totalPrice;
     });

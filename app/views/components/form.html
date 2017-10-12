@@ -16,7 +16,7 @@
           <input ng-show="field.type == 'percent'" type="text" name="{{field.name}}" class="mask percent" ng-model="data[field.name]" placeholder="{{field.name}}" ng-readonly="field.readonly">
         </div>
       </div>
-      <div>
+      <div ng-if="data._id">
         <canvas id="canvas"></canvas>
       </div>
 

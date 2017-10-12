@@ -1,15 +1,14 @@
-angular.module('storecontrol').controller('FormController', ['$scope', '$timeout', '$stateParams', '$state', '$collection', '$fields', '$parentScreen', function($scope, $timeout, $stateParams, $state, $collection, $fields, $parentScreen) {
+angular.module('storecontrol').controller('FormController', ['$scope', '$controller', '$timeout', '$stateParams', '$state', '$collection', '$fields', '$parentScreen', function($scope, $controller, $timeout, $stateParams, $state, $collection, $fields, $parentScreen) {
 
   $scope.data = {};
 
   $scope.fields = $fields;
 
-  $timeout(function() {
-    $('.mask.cpf').mask('000.000.000-00', {reverse: true});
-    $('.mask.number').mask('000000000000', {reverse: true});
-    $('.mask.date').mask('00/00/0000');
-    $('.mask.percent').mask('000', {reverse: true});
+  angular.extend(this, $controller('BaseController', {
+    $scope: $scope
+  }));
 
+  $timeout(function() {
     $('#form').form({
       onSuccess: function(evt) {
         $scope.save();

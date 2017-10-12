@@ -2,11 +2,11 @@
   <div class="ui segment">
     <form class="ui form">
       <div class="field">
-        <label>Cliente</label>
-        <input type="text" ng-model="selling.customerCpf" class="mask cpf" placeholder="Cliente">
+        <label>CPF Cliente</label>
+        <input type="text" ng-model="selling.customerCpf" class="mask cpf" placeholder="CPF Cliente">
       </div>
       <div class="field">
-        <label>Codigo / Nome</label>
+        <label>Codigo / Nome Produto</label>
         <input type="text" ng-model="searchTerm" placeholder="Codigo / Nome" ng-change="search();">
         <div class="ui relaxed divided list">
           <div class="item" ng-repeat="product in suggestionItems">
