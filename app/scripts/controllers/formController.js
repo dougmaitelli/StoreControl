@@ -8,6 +8,30 @@ angular.module('storecontrol').controller('FormController', ['$scope', '$control
     $scope: $scope
   }));
 
+  $scope.initModel = function() {
+    $fields.forEach(function(block) {
+      block.forEach(function(field) {
+        if (!field.initialValue) {
+          field.initialValue = null;
+
+          if (field.type === 'number' || field.type === 'price' || field.type === 'percent') {
+            field.initialValue = 0;
+          }
+        }
+
+        $scope.data[field.name] = field.initialValue;
+      });
+    });
+  };
+
+  $scope.initModel();
+
+  $scope.$watch('data', function(newVal, oldVal) {
+    if ($scope.afterChanges) {
+      $scope.afterChanges(newVal, oldVal);
+    }
+  }, true);
+
   $timeout(function() {
     $('#form').form({
       onSuccess: function(evt) {

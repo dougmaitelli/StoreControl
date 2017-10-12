@@ -4,7 +4,7 @@ angular.module('storecontrol').controller('NewProductController', ['$scope', '$c
     [
       {
         name: 'code',
-        type: 'number',
+        type: 'text',
         rules: [
           {
             type   : 'empty',
@@ -56,6 +56,22 @@ angular.module('storecontrol').controller('NewProductController', ['$scope', '$c
     $fields: fields,
     $parentScreen: 'productList'
   }));
+
+  var ignoreNextchange = false;
+  $scope.afterChanges = function(newVal, oldVal) {
+    if (ignoreNextchange) {
+      ignoreNextchange = false;
+      return;
+    }
+
+    if (oldVal.cost != newVal.cost || oldVal.sellMargin != newVal.sellMargin && newVal.cost && newVal.price) {
+      $scope.data.price = newVal.cost + newVal.cost * newVal.sellMargin / 100;
+    } else if (oldVal.price != newVal.price && newVal.cost && newVal.sellMargin) {
+      $scope.data.sellMargin = (newVal.price - newVal.cost) / newVal.cost * 100;
+    }
+
+    ignoreNextchange = true;
+  };
 
   $scope.afterLoad = function(data) {
     var sellingsCollection = DbService.getCollection('sellings');
@@ -131,8 +147,7 @@ angular.module('storecontrol').controller('NewProductController', ['$scope', '$c
               scales: {
                   yAxes: [{
                       ticks: {
-                          beginAtZero: true,
-                          fixedStepSize: 1
+                          beginAtZero: true
                       }
                   }]
               }

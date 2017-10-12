@@ -1,4 +1,4 @@
-angular.module("storecontrol", ['ui.router', 'bcherny/formatAsCurrency']).config([
+angular.module("storecontrol", ['ui.router']).config([
   '$httpProvider',
   '$stateProvider',
   '$urlRouterProvider',
@@ -72,16 +72,40 @@ angular.module("storecontrol", ['ui.router', 'bcherny/formatAsCurrency']).config
 
 		$urlRouterProvider.otherwise('/');
   }
-]).directive('currency', function () {
-    return {
-        require: 'ngModel',
-        link: function(elem, $scope, attrs, ngModel){
-            ngModel.$formatters.push(function(val){
-                return '$' + val
-            });
-            ngModel.$parsers.push(function(val){
-                return val.replace(/^\$/, '')
-            });
+]).directive('currency', ['$filter', function($filter) {
+  return {
+    restrict: 'A',
+    require: 'ngModel',
+    scope: {
+      model: '=ngModel'
+    },
+    link: function(scope, element, attrs, ngModel) {
+      ngModel.$formatters.push(function(val) {
+        if (typeof val === undefined || val === null) {
+          return;
         }
+
+        return $filter('currency')(val);
+      });
+
+      scope.$watch(function () {
+        return ngModel.$modelValue;
+      }, function() {
+        ngModel.$setViewValue($filter('currency')(ngModel.$modelValue));
+        ngModel.$render();
+      })
+
+      ngModel.$parsers.push(function(val) {
+        if (typeof val === undefined || val === null) {
+          return;
+        }
+
+        var pos = val.length - val.indexOf('.') - 3;
+
+        val = Number(val.replace(/[^0-9\.-]+/g,"")) * Math.pow(10, pos);
+
+        return val;
+      });
     }
-});
+  }
+}]);
