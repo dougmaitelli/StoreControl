@@ -33,8 +33,7 @@ function checkForUpdates() {
     			type: 'question',
     			buttons: ['Install and Relaunch', 'Later'],
     			defaultId: 0,
-    			message: 'A new version of ' + app.getName() + ' has been downloaded',
-    			detail: JSON.stringify(info)
+    			message: 'A new version (' + info[2] + ') of ' + app.getName() + ' has been downloaded'
     		}, response => {
     			if (response === 0) {
             // Restart the app and install the update
