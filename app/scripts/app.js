@@ -88,7 +88,7 @@ angular.module("storecontrol", ['ui.router']).config([
         return $filter('currency')(val);
       });
 
-      scope.$watch(function () {
+      scope.$watch(function() {
         return ngModel.$modelValue;
       }, function() {
         ngModel.$setViewValue($filter('currency')(ngModel.$modelValue));

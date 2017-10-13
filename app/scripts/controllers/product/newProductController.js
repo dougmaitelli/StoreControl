@@ -57,20 +57,20 @@ angular.module('storecontrol').controller('NewProductController', ['$scope', '$c
     $parentScreen: 'productList'
   }));
 
-  var ignoreNextchange = false;
+  function numberIsValid(number) {
+    return typeof number != undefined && number != null && !isNaN(number);
+  }
+
   $scope.afterChanges = function(newVal, oldVal) {
-    if (ignoreNextchange) {
-      ignoreNextchange = false;
-      return;
-    }
-
-    if (oldVal.cost != newVal.cost || oldVal.sellMargin != newVal.sellMargin && newVal.cost && newVal.price) {
+    if (numberIsValid(newVal.cost) && numberIsValid(newVal.price) && (oldVal.cost != newVal.cost || oldVal.sellMargin != newVal.sellMargin)) {
       $scope.data.price = newVal.cost + newVal.cost * newVal.sellMargin / 100;
-    } else if (oldVal.price != newVal.price && newVal.cost && newVal.sellMargin) {
+      return true;
+    } else if (numberIsValid(newVal.cost) && numberIsValid(newVal.sellMargin) && oldVal.price != newVal.price) {
       $scope.data.sellMargin = (newVal.price - newVal.cost) / newVal.cost * 100;
+      return true;
     }
 
-    ignoreNextchange = true;
+    return false;
   };
 
   $scope.afterLoad = function(data) {

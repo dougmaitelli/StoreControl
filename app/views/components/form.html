@@ -8,12 +8,7 @@
       <div class="{{numberToWord(block.length)}} + {{(block.length == 1 ? 'field' : 'fields')}}" ng-repeat="block in fields">
         <div class="field" ng-repeat="field in block">
           <label>{{field.name}}</label>
-          <input ng-show="field.type == 'text'" type="text" name="{{field.name}}" ng-model="data[field.name]" placeholder="{{field.name}}" ng-readonly="field.readonly">
-          <input ng-show="field.type == 'cpf'" type="text" name="{{field.name}}" class="mask cpf" ng-model="data[field.name]" placeholder="{{field.name}}" ng-readonly="field.readonly">
-          <input ng-show="field.type == 'number'" type="text" name="{{field.name}}" class="mask number" ng-model="data[field.name]" placeholder="{{field.name}}" ng-readonly="field.readonly">
-          <input ng-show="field.type == 'date'" type="text" name="{{field.name}}" class="mask date" ng-model="data[field.name]" placeholder="{{field.name}}" ng-readonly="field.readonly">
-          <input ng-show="field.type == 'price'" type="text" name="{{field.name}}" ng-model="data[field.name]" currency placeholder="{{field.name}}" ng-readonly="field.readonly">
-          <input ng-show="field.type == 'percent'" type="number" name="{{field.name}}" ng-model="data[field.name]" placeholder="{{field.name}}" ng-readonly="field.readonly">
+          <form-input type="field.type"></form-input>
         </div>
       </div>
       <div ng-if="data._id">
