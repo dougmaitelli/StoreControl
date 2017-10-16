@@ -11,9 +11,7 @@
           <form-input type="field.type"></form-input>
         </div>
       </div>
-      <div ng-if="data._id">
-        <canvas id="canvas"></canvas>
-      </div>
+      <ng-include src="'views/' + extraTemplate"></ng-include>
 
       <div class="ui blue submit button">Salvar</div>
 	    <div class="ui right floated red inverted button" ng-show="data._id" ng-click="delete();">Deletar</div>

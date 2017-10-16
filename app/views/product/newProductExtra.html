@@ -1,0 +1,11 @@
+<div ng-if="data._id">
+  <h4 class="ui header">Vendas</h4>
+  <span>
+    Mostrar por
+    <select class="ui dropdown" ng-model="chartPeriod" ng-change="redrawChart(chartPeriod);">
+      <option value="day">Dia</option>
+      <option value="month">Mes</option>
+    </select>
+  </span>
+  <canvas id="canvas"></canvas>
+</div>

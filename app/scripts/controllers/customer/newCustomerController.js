@@ -1,4 +1,4 @@
-angular.module('storecontrol').controller('NewCustomerController', ['$scope', '$controller', '$timeout', 'DbService', function($scope, $controller, $timeout, DbService) {
+angular.module('storecontrol').controller('NewCustomerController', ['$scope', '$controller', '$timeout', 'DbService', 'chartService', function($scope, $controller, $timeout, DbService, chartService) {
 
   var fields = [
     [
@@ -38,6 +38,8 @@ angular.module('storecontrol').controller('NewCustomerController', ['$scope', '$
     ]
   ];
 
+  $scope.extraTemplate = 'customer/newCustomerExtra.html';
+
   angular.extend(this, $controller('FormController', {
     $scope: $scope,
     $collection: DbService.getCollection('customers'),
@@ -58,69 +60,21 @@ angular.module('storecontrol').controller('NewCustomerController', ['$scope', '$
   };
 
   $scope.afterLoad = function(data) {
-    $scope.generateChart();
+    $scope.chart = chartService.generateChart(5, 'month', getSellingTotalPerPeriod);
   };
 
-  function getExpendTotalPerMonth(month, year) {
+  function getSellingTotalPerPeriod(start, end, oDeferred) {
     var sellingsCollection = DbService.getCollection('sellings');
 
     var totalExpends = 0;
 
-    var oDeferred = $.Deferred();
-    sellingsCollection.find({customerCpf: $scope.data.cpf, created_on: {$gte: new Date(year, month - 1, 1), $lt: new Date(year, month, 1)}}).exec(function(err, sellings) {
+    sellingsCollection.find({customerCpf: $scope.data.cpf, created_on: {$gte: start, $lte: end}}).exec(function(err, sellings) {
       sellings.forEach(function(selling) {
         totalExpends += selling.totalPrice;
       });
 
       oDeferred.resolve(totalExpends);
     });
-
-    return oDeferred.promise();
   }
-
-  $scope.generateChart = function() {
-    var today = new Date();
-    var month = today.getMonth() + 1;
-    var year = today.getFullYear();
-
-    var calculations = [getExpendTotalPerMonth(month - 2, year), getExpendTotalPerMonth(month - 1, year), getExpendTotalPerMonth(month, year)];
-
-    $.when.apply($, calculations).then(function(totalSellings) {
-      var config = {
-          type: 'line',
-          data: {
-              labels: [(month - 2) + '/' + year, (month - 1) + '/' + year, month + '/' + year],
-              datasets: [{
-                  label: "Total Gasto",
-                  fill: true,
-                  backgroundColor: "rgb(54, 162, 235)",
-                  borderColor: "rgb(54, 162, 235)",
-                  data: [arguments[0], arguments[1], arguments[2]]
-              }]
-          },
-          options: {
-              responsive: true,
-              tooltips: {
-                  mode: 'index',
-                  intersect: false,
-              },
-              hover: {
-                  mode: 'nearest',
-                  intersect: true
-              },
-              scales: {
-                  yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                  }]
-              }
-          }
-      };
-
-      var ctx = document.getElementById("canvas").getContext("2d");
-      new Chart(ctx, config);
-    });
-  };
 
 }]);
