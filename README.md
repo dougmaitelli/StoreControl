@@ -4,5 +4,5 @@
 
 ## Run Dev Environment
 - Install Node and Npm
-- Run 'npm install' or 'npm run install-wsl' if running in Bash on Windows
-- Run 'npm run dev'
+- Run `npm install` or `npm run install-wsl` if running in Bash on Windows
+- Run `npm run dev`
