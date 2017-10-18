@@ -1,7 +1,7 @@
 {
   "name": "StoreControl",
   "productName": "StoreControl",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "StoreControl",
   "repository": "https://github.com/dougmaitelli/StoreControl",
   "license": "UNLICENSED",
@@ -35,6 +35,17 @@
       "github"
     ]
   },
+  "xo": {
+		"space": true,
+    "globals": [
+      "document",
+      "angular",
+      "$",
+      "moment",
+      "Chart",
+      "swal"
+    ]
+	},
   "dependencies": {
     "@uirouter/angularjs": "^1.0.7",
     "angular": "^1.6.6",
