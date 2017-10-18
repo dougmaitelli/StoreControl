@@ -36,7 +36,7 @@
     ]
   },
   "xo": {
-		"space": true,
+    "space": true,
     "globals": [
       "document",
       "angular",
@@ -45,7 +45,7 @@
       "Chart",
       "swal"
     ]
-	},
+  },
   "dependencies": {
     "@uirouter/angularjs": "^1.0.7",
     "angular": "^1.6.6",
