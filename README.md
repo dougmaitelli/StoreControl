@@ -3,7 +3,7 @@
 # StoreControl
 
 ## Run Dev Environment
-- Install NodeJs and Npm
+- Install NodeJs
 - Install Yarn
-- Run `npm install` or `npm run install-wsl` if running in Bash on Windows
-- Run `npm run dev`
+- Run `yarn install` or `yarn install-wsl` if running in Bash on Windows
+- Run `yarn dev`
