@@ -1,7 +1,13 @@
-angular.module('storecontrol').factory('chartService', () => {
-  const chartService = {};
+export default class ChartService {
 
-  function getDatesToPast(n, period) {
+  constructor() {
+  }
+
+  destroy() {
+    this.chart.destroy();
+  }
+
+  _getDatesToPast(n, period) {
     const dates = [];
 
     for (let i = 0; i < n; i++) {
@@ -11,17 +17,17 @@ angular.module('storecontrol').factory('chartService', () => {
     return dates;
   }
 
-  function getDataSetToPast(dates, period, queryFunction) {
+  _getDataSetToPast(dates, period, queryFunction) {
     const dataSet = [];
 
     dates.forEach(date => {
-      dataSet.push(getSellingTotalPerPeriod(date, period, queryFunction));
+      dataSet.push(_getTotalPerPeriod(date, period, queryFunction));
     });
 
     return dataSet;
   }
 
-  function getSellingTotalPerPeriod(date, period, queryFunction) {
+  _getTotalPerPeriod(date, period, queryFunction) {
     const start = date.clone().startOf(period).toDate();
     const end = date.clone().endOf(period).toDate();
 
@@ -31,9 +37,9 @@ angular.module('storecontrol').factory('chartService', () => {
     return oDeferred.promise();
   }
 
-  chartService.generateChart = function (nToShow, period, queryFunction) {
-    const datesToFilter = getDatesToPast(nToShow, period);
-    const calculations = getDataSetToPast(datesToFilter, period, queryFunction);
+  generateChart(nToShow, period, queryFunction) {
+    const datesToFilter = _getDatesToPast(nToShow, period);
+    const calculations = _getDataSetToPast(datesToFilter, period, queryFunction);
 
     let format;
     if (period === 'day') {
@@ -41,12 +47,6 @@ angular.module('storecontrol').factory('chartService', () => {
     } else if (period === 'month') {
       format = 'MMMM YYYY';
     }
-
-    const chartInstance = {
-      destroy() {
-        this.chart.destroy();
-      }
-    };
 
     $.when.apply($, calculations).then(function () {
       const config = {
@@ -86,11 +86,7 @@ angular.module('storecontrol').factory('chartService', () => {
       };
 
       const ctx = document.getElementById('canvas').getContext('2d');
-      chartInstance.chart = new Chart(ctx, config);
-    });
-
-    return chartInstance;
-  };
-
-  return chartService;
-});
+      this.chart = new Chart(ctx, config);
+    }).bind(this);
+  }
+}

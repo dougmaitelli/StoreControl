@@ -12,11 +12,12 @@
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
     "install-wsl": "yarn && yarn remove electron --dev && export npm_config_platform=win32 && yarn add electron --dev && unset npm_config_platform",
-    "start": "electron .",
-    "dev": "electron . --debug",
-    "dist": "electron-builder",
+    "build": "webpack",
+    "start": "yarn build && electron .",
+    "dev": "concurrently --kill-others --raw \"webpack-dev-server --progress --colors\" \"sleep 5 && electron . --debug\"",
+    "dist": "yarn build && electron-builder",
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
-    "release": "build --publish onTagOrDraft"
+    "release": "yarn build && electron-builder --publish onTagOrDraft"
   },
   "build": {
     "win": {
@@ -61,7 +62,16 @@
     "sweetalert": "^1.1.3"
   },
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "concurrently": "^3.5.0",
+    "css-loader": "^0.28.7",
     "electron": "^1.7.9",
-    "electron-builder": "^19.37.2"
+    "electron-builder": "^19.37.2",
+    "html-webpack-plugin": "^2.30.1",
+    "style-loader": "^0.19.0",
+    "webpack": "^3.8.1",
+    "webpack-dev-server": "^2.9.3"
   }
 }

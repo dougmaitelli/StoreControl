@@ -4,7 +4,7 @@
 
 :smile:
 
-<img src="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/nodejs-icon.svg?sanitize=true" width="48"> <img src="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/yarn.svg?sanitize=true" width="48"> <img src="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/electron.svg?sanitize=true" width="48"> <img src="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/angular-icon.svg?sanitize=true" width="48">
+<img src="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/nodejs-icon.svg?sanitize=true" width="48"> <img src="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/yarn.svg?sanitize=true" width="48"> <img src="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/electron.svg?sanitize=true" width="48"> <img src="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/webpack.svg?sanitize=true" width="48"> <img src="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/babel.svg?sanitize=true" width="48"> <img src="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/angular-icon.svg?sanitize=true" width="48">
 
 ## Run Dev Environment
 - Install NodeJs

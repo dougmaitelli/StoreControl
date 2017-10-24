@@ -8,8 +8,6 @@
   <link rel="stylesheet" type="text/css" href="../node_modules/animate.css/animate.min.css">
   <link rel="stylesheet" type="text/css" href="../node_modules/sweetalert/dist/sweetalert.css">
 
-  <link rel="stylesheet" href="assets/css/style.css">
-
   <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
 
   <script src="../node_modules/jquery/dist/jquery.min.js"></script>
@@ -69,10 +67,11 @@
   <div class="contentContainer" ui-view></div>
 
   <script>
-    require('../renderer.js')
+    require('../renderer.js');
   </script>
 
-
-
-<script type="text/javascript" src="scripts/app.bundle.js"></script></body>
+<% if (htmlWebpackPlugin.options.devServer) { %>
+  <script src="<%= htmlWebpackPlugin.options.devServer%>/webpack-dev-server.js"></script>
+<% } %>
+</body>
 </html>
