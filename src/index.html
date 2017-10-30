@@ -4,16 +4,14 @@
   <meta charset="UTF-8">
   <title>StoreControl</title>
 
-  <link rel="stylesheet" type="text/css" href="../node_modules/semantic-ui-css/semantic.min.css">
-  <link rel="stylesheet" type="text/css" href="../node_modules/animate.css/animate.min.css">
+  <link rel="stylesheet" href="../node_modules/semantic-ui-css/semantic.min.css">
+  <link rel="stylesheet" href="../node_modules/animate.css/animate.min.css">
   <link rel="stylesheet" type="text/css" href="../node_modules/sweetalert/dist/sweetalert.css">
 
   <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
 
   <script src="../node_modules/jquery/dist/jquery.min.js"></script>
   <script src="../node_modules/moment/min/moment-with-locales.min.js"></script>
-  <script src="../node_modules/angular/angular.min.js"></script>
-  <script src="../node_modules/@uirouter/angularjs/release/angular-ui-router.min.js"></script>
   <script src="../node_modules/semantic-ui-css/semantic.min.js"></script>
   <script src="../node_modules/sweetalert/dist/sweetalert.min.js"></script>
   <script src="../node_modules/jquery-mask-plugin/dist/jquery.mask.min.js"></script>
@@ -67,11 +65,26 @@
   <div class="contentContainer" ui-view></div>
 
   <script>
-    require('../renderer.js');
-  </script>
+    const remote = require('electron').remote;
 
-<% if (htmlWebpackPlugin.options.devServer) { %>
-  <script src="<%= htmlWebpackPlugin.options.devServer%>/webpack-dev-server.js"></script>
-<% } %>
+    document.getElementById("min-btn").addEventListener("click", function (e) {
+         var window = remote.getCurrentWindow();
+         window.minimize();
+    });
+
+    document.getElementById("max-btn").addEventListener("click", function (e) {
+         var window = remote.getCurrentWindow();
+         if (!window.isMaximized()) {
+             window.maximize();
+         } else {
+             window.unmaximize();
+         }
+    });
+
+    document.getElementById("close-btn").addEventListener("click", function (e) {
+         var window = remote.getCurrentWindow();
+         window.close();
+    });
+  </script>
 </body>
 </html>

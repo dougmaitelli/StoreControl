@@ -21,7 +21,7 @@ export default class ChartService {
     const dataSet = [];
 
     dates.forEach(date => {
-      dataSet.push(_getTotalPerPeriod(date, period, queryFunction));
+      dataSet.push(this._getTotalPerPeriod(date, period, queryFunction));
     });
 
     return dataSet;
@@ -38,8 +38,8 @@ export default class ChartService {
   }
 
   generateChart(nToShow, period, queryFunction) {
-    const datesToFilter = _getDatesToPast(nToShow, period);
-    const calculations = _getDataSetToPast(datesToFilter, period, queryFunction);
+    const datesToFilter = this._getDatesToPast(nToShow, period);
+    const calculations = this._getDataSetToPast(datesToFilter, period, queryFunction);
 
     let format;
     if (period === 'day') {
@@ -48,7 +48,7 @@ export default class ChartService {
       format = 'MMMM YYYY';
     }
 
-    $.when.apply($, calculations).then(function () {
+    $.when.apply($, calculations).then(function() {
       const config = {
         type: 'line',
         data: {
@@ -87,6 +87,6 @@ export default class ChartService {
 
       const ctx = document.getElementById('canvas').getContext('2d');
       this.chart = new Chart(ctx, config);
-    }).bind(this);
+    }.bind(this));
   }
 }

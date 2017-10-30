@@ -1,0 +1,47 @@
+<div class="ui container contentContainerInner animated fadeInLeft">
+  <div class="ui segment">
+    <form class="ui form">
+      <div class="field">
+        <label>Nome</label>
+        <input type="text" name="name" ng-model="searchTerms.name" placeholder="Nome">
+      </div>
+      <button class="ui button" ng-click="doSearch();">Buscar</button>
+      <a class="ui right floated small primary labeled icon button" ui-sref="newProduct">
+        <i class="user icon"></i> Novo
+      </a>
+    </form>
+  </div>
+
+  <div class="ui dimmable resultTable animated bounceIn" ng-show="totalPages > 0">
+    <div class="ui inverted dimmer loadingIndicator">
+      <div class="ui active text loader">Loading</div>
+    </div>
+    <table class="ui celled table">
+      <thead>
+        <tr>
+          <th>Codigo</th>
+          <th>Nome</th>
+          <th>Acoes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="result in searchResults">
+          <td><a ui-sref="editProduct({id: result._id})">{{result.code}}</a></td>
+          <td>{{result.name}}</td>
+          <td>
+            <button class="ui icon red button" ng-click="delete(result._id);">
+              <i class="trash icon"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th colspan="3">
+            <ng-include src="'views/components/pagination.html'"/>
+          </th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
