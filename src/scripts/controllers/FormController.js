@@ -1,5 +1,13 @@
 import BaseController from './BaseController'
 
+import $ from 'jquery'
+import swal from 'sweetalert'
+
+import jQuery from 'jquery'
+window.jQuery = jQuery
+require('../../../semantic/dist/components/dropdown')
+require('../../../semantic/dist/components/form')
+
 export default class FormController extends BaseController {
 
   constructor($scope, $timeout, $stateParams, $state, $collection, $parentScreen) {
@@ -109,8 +117,8 @@ export default class FormController extends BaseController {
         swal({
           title: 'Sucesso!',
           text: 'Registro salvo com sucesso!',
-          type: 'success'
-        }, () => {
+          icon: 'success'
+        }).then(() => {
           $state.go($parentScreen);
         });
       };
@@ -126,29 +134,33 @@ export default class FormController extends BaseController {
       swal({
         title: 'Você tem certeza?',
         text: 'Esta ação não poderá ser desfeita!',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#DD6B55',
-        confirmButtonText: 'Sim, deletar!',
-        closeOnConfirm: false
-      }, () => {
-        $collection.remove({_id: $scope.data._id}, err => {
-          if (err) {
-            swal({
-              title: 'Erro!',
-              text: 'Ocorreu um erro.',
-              type: 'error'
-            });
-          } else {
-            swal({
-              title: 'Deletado!',
-              text: 'O registro foi deletado.',
-              type: 'success'
-            }, () => {
-              $state.go('productList');
-            });
+        icon: 'warning',
+        buttons: {
+          cancel: {
+            text: 'Cancelar',
+            value: null,
+            visible: true,
+            closeModal: true
+          },
+          confirm: {
+            text: 'Sim, deletar!',
+            value: true,
+            visible: true,
+            closeModal: false
           }
-        });
+        }
+      }).then((willDelete) => {
+        if (willDelete) {
+          $collection.remove({_id: $scope.data._id}, err => {
+            if (err) {
+              swal('Erro!', 'Ocorreu um erro.', 'error');
+            } else {
+              swal('Deletado!', 'O registro foi deletado.', 'success').then(() => {
+                $scope.doSearch();
+              });
+            }
+          });
+        }
       });
     };
   }

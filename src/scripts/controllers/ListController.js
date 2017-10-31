@@ -1,5 +1,8 @@
 import BaseController from './BaseController'
 
+import $ from 'jquery'
+import swal from 'sweetalert'
+
 export default class ListController extends BaseController {
 
   constructor($scope, $timeout, $collection) {
@@ -86,29 +89,33 @@ export default class ListController extends BaseController {
       swal({
         title: 'Você tem certeza?',
         text: 'Esta ação não poderá ser desfeita!',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#DD6B55',
-        confirmButtonText: 'Sim, deletar!',
-        closeOnConfirm: false
-      }, () => {
-        $collection.remove({_id: id}, err => {
-          if (err) {
-            swal({
-              title: 'Erro!',
-              text: 'Ocorreu um erro.',
-              type: 'error'
-            });
-          } else {
-            swal({
-              title: 'Deletado!',
-              text: 'O registro foi deletado.',
-              type: 'success'
-            }, () => {
-              $scope.doSearch();
-            });
+        icon: 'warning',
+        buttons: {
+          cancel: {
+            text: 'Cancelar',
+            value: null,
+            visible: true,
+            closeModal: true
+          },
+          confirm: {
+            text: 'Sim, deletar!',
+            value: true,
+            visible: true,
+            closeModal: false
           }
-        });
+        }
+      }).then((willDelete) => {
+        if (willDelete) {
+          $collection.remove({_id: id}, err => {
+            if (err) {
+              swal('Erro!', 'Ocorreu um erro.', 'error');
+            } else {
+              swal('Deletado!', 'O registro foi deletado.', 'success').then(() => {
+                $scope.doSearch();
+              });
+            }
+          });
+        }
       });
     };
   }

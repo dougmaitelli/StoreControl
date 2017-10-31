@@ -1,5 +1,7 @@
 import BaseController from '../BaseController'
 
+import swal from 'sweetalert'
+
 export default class NewSellingController extends BaseController {
 
   constructor($scope, $timeout, $state, DbService) {
@@ -81,14 +83,14 @@ export default class NewSellingController extends BaseController {
           swal({
             title: 'Erro!',
             text: 'Ocorreu um erro.',
-            type: 'error'
+            icon: 'error'
           });
         } else {
           swal({
             title: 'Sucesso!',
             text: 'Registro salvo com sucesso!',
-            type: 'success'
-          }, () => {
+            icon: 'success'
+          }).then(() => {
             $state.go('home');
           });
         }

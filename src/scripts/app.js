@@ -1,3 +1,4 @@
+import '../../semantic/dist/semantic.css';
 import '../assets/css/style.css'
 
 import angular from 'angular'

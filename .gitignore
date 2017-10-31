@@ -3,3 +3,4 @@ electron-packager/
 app/
 dist/
 data/
+semantic/

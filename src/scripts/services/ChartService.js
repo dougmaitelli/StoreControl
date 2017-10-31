@@ -1,3 +1,7 @@
+import $ from 'jquery'
+import Chart from 'chart.js'
+import moment from 'moment'
+
 export default class ChartService {
 
   constructor() {
