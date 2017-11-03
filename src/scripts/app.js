@@ -1,4 +1,5 @@
 import '../../semantic/dist/semantic.css';
+import '../../node_modules/animate.css/animate.min.css';
 import '../assets/css/style.css'
 
 import angular from 'angular'

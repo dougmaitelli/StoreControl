@@ -1,11 +1,13 @@
 {
   "name": "StoreControl",
   "productName": "StoreControl",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "StoreControl",
   "repository": "https://github.com/dougmaitelli/StoreControl",
   "license": "UNLICENSED",
-  "keywords": ["Store"],
+  "keywords": [
+    "Store"
+  ],
   "author": "Douglas Maitelli",
   "homepage": "",
   "main": "main.js",
@@ -20,6 +22,11 @@
     "release": "yarn build && electron-builder --publish onTagOrDraft"
   },
   "build": {
+    "files": [
+      "!node_modules${/*}",
+      "!semantic${/*}",
+      "!src${/*}"
+    ],
     "win": {
       "icon": "build/icon.ico",
       "target": [
