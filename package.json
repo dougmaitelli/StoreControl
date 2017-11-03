@@ -5,7 +5,7 @@
   "description": "StoreControl",
   "repository": "https://github.com/dougmaitelli/StoreControl",
   "license": "UNLICENSED",
-  "keywords": [],
+  "keywords": ["Store"],
   "author": "Douglas Maitelli",
   "homepage": "",
   "main": "main.js",
