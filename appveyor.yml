@@ -12,7 +12,8 @@ init:
 
 install:
   - ps: Install-Product node 8 x64
-  - npm install
+  - npm install semantic-ui
+  - yarn
 
 build_script:
   - yarn dist
