@@ -1,0 +1,22 @@
+<div class="ui dimmable container contentContainerInner animated fadeIn">
+  <div class="ui inverted dimmer loadingIndicator">
+    <div class="ui active text loader">Loading</div>
+  </div>
+
+  <div class="ui segment">
+    <form id="form" class="ui form">
+      <div class="{{numberToWord(block.length)}} + {{(block.length == 1 ? 'field' : 'fields')}}" ng-repeat="block in fields">
+        <div class="field" ng-repeat="field in block">
+          <label>{{field.name}}</label>
+          <form-input type="field.type"></form-input>
+        </div>
+      </div>
+      <ng-include src="'views/' + extraTemplate"></ng-include>
+
+      <div class="ui blue submit button">Salvar</div>
+	    <div class="ui right floated red inverted button" ng-show="data._id" ng-click="delete();">Deletar</div>
+
+      <div class="ui error message"></div>
+    </form>
+  </div>
+</div>

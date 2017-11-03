@@ -4,7 +4,7 @@ platform:
   - x64
 
 cache:
-  - node_modules
+  - node_modules -> package.json
   - '%USERPROFILE%\.electron'
 
 init:
@@ -12,9 +12,10 @@ init:
 
 install:
   - ps: Install-Product node 8 x64
+  - npm install semantic-ui
   - yarn
 
 build_script:
   - yarn dist
-  
+
 test: off

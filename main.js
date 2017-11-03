@@ -13,7 +13,11 @@ function createWindow() {
   mainWindow.maximize();
 
   // And load the index.html of the app.
-  mainWindow.loadURL(`file://${__dirname}/app/index.html`);
+  if (!debug) {
+    mainWindow.loadURL(`file://${__dirname}/app/index.html`);
+  } else {
+    mainWindow.loadURL('http://localhost:8080/');
+  }
 
   if (debug) {
     // Open the DevTools.
