@@ -32,7 +32,7 @@ var module = angular.module('storecontrol', ['ui.router'])
     url: '/',
     views: {
       '': {
-        templateUrl: '/views/home.html',
+        templateUrl: 'views/home.html',
         controller: 'HomeController'
       }
     }
@@ -40,7 +40,7 @@ var module = angular.module('storecontrol', ['ui.router'])
     url: '/customer',
     views: {
       '': {
-        templateUrl: '/views/customer/customerList.html',
+        templateUrl: 'views/customer/customerList.html',
         controller: 'CustomerListController'
       }
     }
@@ -48,7 +48,7 @@ var module = angular.module('storecontrol', ['ui.router'])
     url: '/customer/new',
     views: {
       '': {
-        templateUrl: '/views/components/form.html',
+        templateUrl: 'views/components/form.html',
         controller: 'NewCustomerController'
       }
     }
@@ -56,7 +56,7 @@ var module = angular.module('storecontrol', ['ui.router'])
     url: '/customer/:id',
     views: {
       '': {
-        templateUrl: '/views/components/form.html',
+        templateUrl: 'views/components/form.html',
         controller: 'NewCustomerController'
       }
     }
@@ -64,7 +64,7 @@ var module = angular.module('storecontrol', ['ui.router'])
     url: '/product',
     views: {
       '': {
-        templateUrl: '/views/product/productList.html',
+        templateUrl: 'views/product/productList.html',
         controller: 'ProductListController'
       }
     }
@@ -72,7 +72,7 @@ var module = angular.module('storecontrol', ['ui.router'])
     url: '/product/new',
     views: {
       '': {
-        templateUrl: '/views/components/form.html',
+        templateUrl: 'views/components/form.html',
         controller: 'NewProductController'
       }
     }
@@ -80,7 +80,7 @@ var module = angular.module('storecontrol', ['ui.router'])
     url: '/product/:id',
     views: {
       '': {
-        templateUrl: '/views/components/form.html',
+        templateUrl: 'views/components/form.html',
         controller: 'NewProductController'
       }
     }
@@ -88,7 +88,7 @@ var module = angular.module('storecontrol', ['ui.router'])
     url: '/selling/new',
     views: {
       '': {
-        templateUrl: '/views/selling/newSelling.html',
+        templateUrl: 'views/selling/newSelling.html',
         controller: 'NewSellingController'
       }
     }
