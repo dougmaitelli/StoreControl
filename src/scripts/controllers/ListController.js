@@ -1,12 +1,11 @@
-import BaseController from './BaseController'
+import BaseController from "./BaseController";
 
-import $ from 'jquery'
-import swal from 'sweetalert'
+import $ from "jquery";
+import swal from "sweetalert";
 
 export default class ListController extends BaseController {
-
   constructor($scope, $timeout, $collection) {
-    super($scope, $timeout)
+    super($scope, $timeout);
 
     $scope.searchTerms = {};
     $scope.searchResults = [];
@@ -24,10 +23,12 @@ export default class ListController extends BaseController {
       const terms = {};
 
       for (const termName in $scope.searchTerms) {
-        if (Object.prototype.hasOwnProperty.call($scope.searchTerms, termName)) {
+        if (
+          Object.prototype.hasOwnProperty.call($scope.searchTerms, termName)
+        ) {
           const termValue = $scope.searchTerms[termName];
           if (termValue) {
-            terms[termName] = new RegExp(termValue, 'i');
+            terms[termName] = new RegExp(termValue, "i");
           }
         }
       }
@@ -35,7 +36,7 @@ export default class ListController extends BaseController {
       processedTerms = terms;
     };
 
-    $scope.doSearch = function () {
+    $scope.doSearch = function() {
       buildTerms();
 
       $collection.count(processedTerms, (err, count) => {
@@ -48,9 +49,15 @@ export default class ListController extends BaseController {
     $scope.getPageArrayRange = () => {
       const pageArray = [];
 
-      const startPage = Math.min(Math.max($scope.currentPage - $scope.pageRangeToDisplay, 1), Math.max($scope.totalPages - $scope.numberOfPagesToDisplay + 1, 1));
+      const startPage = Math.min(
+        Math.max($scope.currentPage - $scope.pageRangeToDisplay, 1),
+        Math.max($scope.totalPages - $scope.numberOfPagesToDisplay + 1, 1)
+      );
 
-      const numberOfPagesToDisplay = Math.min($scope.numberOfPagesToDisplay, $scope.totalPages);
+      const numberOfPagesToDisplay = Math.min(
+        $scope.numberOfPagesToDisplay,
+        $scope.totalPages
+      );
 
       for (let i = 0; i < numberOfPagesToDisplay; i++) {
         pageArray.push(startPage + i);
@@ -66,15 +73,19 @@ export default class ListController extends BaseController {
 
       $scope.currentPage = pageNumber;
 
-      $('.resultTable .loadingIndicator').addClass('active');
+      $(".resultTable .loadingIndicator").addClass("active");
 
-      $collection.find(processedTerms).skip($scope.totalPerPage * ($scope.currentPage - 1)).limit($scope.totalPerPage).exec((err, items) => {
-        $timeout(() => {
-          $scope.searchResults = items;
+      $collection
+        .find(processedTerms)
+        .skip($scope.totalPerPage * ($scope.currentPage - 1))
+        .limit($scope.totalPerPage)
+        .exec((err, items) => {
+          $timeout(() => {
+            $scope.searchResults = items;
 
-          $('.resultTable .loadingIndicator').removeClass('active');
-        }, 0);
-      });
+            $(".resultTable .loadingIndicator").removeClass("active");
+          }, 0);
+        });
     };
 
     $scope.prevPage = () => {
@@ -87,32 +98,34 @@ export default class ListController extends BaseController {
 
     $scope.delete = id => {
       swal({
-        title: 'Você tem certeza?',
-        text: 'Esta ação não poderá ser desfeita!',
-        icon: 'warning',
+        title: "Você tem certeza?",
+        text: "Esta ação não poderá ser desfeita!",
+        icon: "warning",
         buttons: {
           cancel: {
-            text: 'Cancelar',
+            text: "Cancelar",
             value: null,
             visible: true,
             closeModal: true
           },
           confirm: {
-            text: 'Sim, deletar!',
+            text: "Sim, deletar!",
             value: true,
             visible: true,
             closeModal: false
           }
         }
-      }).then((willDelete) => {
+      }).then(willDelete => {
         if (willDelete) {
-          $collection.remove({_id: id}, err => {
+          $collection.remove({ _id: id }, err => {
             if (err) {
-              swal('Erro!', 'Ocorreu um erro.', 'error');
+              swal("Erro!", "Ocorreu um erro.", "error");
             } else {
-              swal('Deletado!', 'O registro foi deletado.', 'success').then(() => {
-                $scope.doSearch();
-              });
+              swal("Deletado!", "O registro foi deletado.", "success").then(
+                () => {
+                  $scope.doSearch();
+                }
+              );
             }
           });
         }

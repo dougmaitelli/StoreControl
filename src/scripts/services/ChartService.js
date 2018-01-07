@@ -1,11 +1,9 @@
-import $ from 'jquery'
-import Chart from 'chart.js'
-import moment from 'moment'
+import $ from "jquery";
+import Chart from "chart.js";
+import moment from "moment";
 
 export default class ChartService {
-
-  constructor() {
-  }
+  constructor() {}
 
   destroy() {
     this.chart.destroy();
@@ -32,8 +30,14 @@ export default class ChartService {
   }
 
   _getTotalPerPeriod(date, period, queryFunction) {
-    const start = date.clone().startOf(period).toDate();
-    const end = date.clone().endOf(period).toDate();
+    const start = date
+      .clone()
+      .startOf(period)
+      .toDate();
+    const end = date
+      .clone()
+      .endOf(period)
+      .toDate();
 
     const oDeferred = $.Deferred();
     queryFunction(start, end, oDeferred);
@@ -43,54 +47,64 @@ export default class ChartService {
 
   generateChart(nToShow, period, queryFunction) {
     const datesToFilter = this._getDatesToPast(nToShow, period);
-    const calculations = this._getDataSetToPast(datesToFilter, period, queryFunction);
+    const calculations = this._getDataSetToPast(
+      datesToFilter,
+      period,
+      queryFunction
+    );
 
     let format;
-    if (period === 'day') {
-      format = 'dddd';
-    } else if (period === 'month') {
-      format = 'MMMM YYYY';
+    if (period === "day") {
+      format = "dddd";
+    } else if (period === "month") {
+      format = "MMMM YYYY";
     }
 
-    $.when.apply($, calculations).then(function() {
-      const config = {
-        type: 'line',
-        data: {
-          labels: datesToFilter.map(date => {
-            return date.format(format);
-          }),
-          datasets: [{
-            fill: true,
-            backgroundColor: 'rgb(54, 162, 235)',
-            borderColor: 'rgb(54, 162, 235)',
-            data: Array.prototype.slice.call(arguments)
-          }]
-        },
-        options: {
-          responsive: true,
-          legend: {
-            display: false
-          },
-          tooltips: {
-            mode: 'index',
-            intersect: false
-          },
-          hover: {
-            mode: 'nearest',
-            intersect: true
-          },
-          scales: {
-            yAxes: [{
-              ticks: {
-                beginAtZero: true
+    $.when.apply($, calculations).then(
+      function() {
+        const config = {
+          type: "line",
+          data: {
+            labels: datesToFilter.map(date => {
+              return date.format(format);
+            }),
+            datasets: [
+              {
+                fill: true,
+                backgroundColor: "rgb(54, 162, 235)",
+                borderColor: "rgb(54, 162, 235)",
+                data: Array.prototype.slice.call(arguments)
               }
-            }]
+            ]
+          },
+          options: {
+            responsive: true,
+            legend: {
+              display: false
+            },
+            tooltips: {
+              mode: "index",
+              intersect: false
+            },
+            hover: {
+              mode: "nearest",
+              intersect: true
+            },
+            scales: {
+              yAxes: [
+                {
+                  ticks: {
+                    beginAtZero: true
+                  }
+                }
+              ]
+            }
           }
-        }
-      };
+        };
 
-      const ctx = document.getElementById('canvas').getContext('2d');
-      this.chart = new Chart(ctx, config);
-    }.bind(this));
+        const ctx = document.getElementById("canvas").getContext("2d");
+        this.chart = new Chart(ctx, config);
+      }.bind(this)
+    );
   }
 }

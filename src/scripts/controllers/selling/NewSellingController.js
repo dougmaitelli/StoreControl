@@ -1,13 +1,12 @@
-import BaseController from '../BaseController'
+import BaseController from "../BaseController";
 
-import swal from 'sweetalert'
+import swal from "sweetalert";
 
 export default class NewSellingController extends BaseController {
-
   constructor($scope, $timeout, $state, DbService) {
-    super($scope, $timeout)
+    super($scope, $timeout);
 
-    const productCollection = DbService.getCollection('products');
+    const productCollection = DbService.getCollection("products");
 
     $scope.searchTerm = null;
     $scope.suggestionItems = [];
@@ -24,11 +23,18 @@ export default class NewSellingController extends BaseController {
         return;
       }
 
-      productCollection.find({$or: [{code: new RegExp($scope.searchTerm, 'i')}, {name: new RegExp($scope.searchTerm, 'i')}]}).exec((err, products) => {
-        $timeout(() => {
-          $scope.suggestionItems = products;
-        }, 0);
-      });
+      productCollection
+        .find({
+          $or: [
+            { code: new RegExp($scope.searchTerm, "i") },
+            { name: new RegExp($scope.searchTerm, "i") }
+          ]
+        })
+        .exec((err, products) => {
+          $timeout(() => {
+            $scope.suggestionItems = products;
+          }, 0);
+        });
     };
 
     $scope.add = product => {
@@ -66,7 +72,8 @@ export default class NewSellingController extends BaseController {
           item.quantity = 1;
         }
 
-        item.totalPrice = (item.price - (item.price * item.discount / 100)) * item.quantity;
+        item.totalPrice =
+          (item.price - item.price * item.discount / 100) * item.quantity;
         totalPrice += item.totalPrice;
       });
 
@@ -74,24 +81,24 @@ export default class NewSellingController extends BaseController {
     };
 
     $scope.confirm = () => {
-      const collection = DbService.getCollection('sellings');
+      const collection = DbService.getCollection("sellings");
 
       $scope.selling.created_on = new Date();
 
       collection.insert($scope.selling, err => {
         if (err) {
           swal({
-            title: 'Erro!',
-            text: 'Ocorreu um erro.',
-            icon: 'error'
+            title: "Erro!",
+            text: "Ocorreu um erro.",
+            icon: "error"
           });
         } else {
           swal({
-            title: 'Sucesso!',
-            text: 'Registro salvo com sucesso!',
-            icon: 'success'
+            title: "Sucesso!",
+            text: "Registro salvo com sucesso!",
+            icon: "success"
           }).then(() => {
-            $state.go('home');
+            $state.go("home");
           });
         }
       });

@@ -1,17 +1,23 @@
-import BaseController from './BaseController'
+import BaseController from "./BaseController";
 
-import $ from 'jquery'
-import swal from 'sweetalert'
+import $ from "jquery";
+import swal from "sweetalert";
 
-import jQuery from 'jquery'
-window.jQuery = jQuery
-require('../../../semantic/dist/components/dropdown')
-require('../../../semantic/dist/components/form')
+import jQuery from "jquery";
+window.jQuery = jQuery;
+require("../../../semantic/dist/components/dropdown");
+require("../../../semantic/dist/components/form");
 
 export default class FormController extends BaseController {
-
-  constructor($scope, $timeout, $stateParams, $state, $collection, $parentScreen) {
-    super($scope, $timeout)
+  constructor(
+    $scope,
+    $timeout,
+    $stateParams,
+    $state,
+    $collection,
+    $parentScreen
+  ) {
+    super($scope, $timeout);
 
     $scope.data = {};
 
@@ -24,7 +30,11 @@ export default class FormController extends BaseController {
           if (!field.initialValue) {
             field.initialValue = null;
 
-            if (field.type === 'number' || field.type === 'price' || field.type === 'percent') {
+            if (
+              field.type === "number" ||
+              field.type === "price" ||
+              field.type === "percent"
+            ) {
               field.initialValue = 0;
             }
           }
@@ -37,21 +47,25 @@ export default class FormController extends BaseController {
     $scope.initModel();
 
     $scope.ignoreNextchange = false;
-    $scope.$watch('data', (newVal, oldVal) => {
-      if ($scope.ignoreNextchange) {
-        $scope.ignoreNextchange = false;
-        return;
-      }
-
-      if ($scope.afterChanges) {
-        if ($scope.afterChanges(newVal, oldVal)) {
-          $scope.ignoreNextchange = true;
+    $scope.$watch(
+      "data",
+      (newVal, oldVal) => {
+        if ($scope.ignoreNextchange) {
+          $scope.ignoreNextchange = false;
+          return;
         }
-      }
-    }, true);
+
+        if ($scope.afterChanges) {
+          if ($scope.afterChanges(newVal, oldVal)) {
+            $scope.ignoreNextchange = true;
+          }
+        }
+      },
+      true
+    );
 
     $timeout(() => {
-      $('#form').form({
+      $("#form").form({
         onSuccess(evt) {
           $scope.save();
           evt.preventDefault();
@@ -60,24 +74,27 @@ export default class FormController extends BaseController {
       });
 
       if ($stateParams.id) {
-        $('.ui.loadingIndicator').addClass('active');
+        $(".ui.loadingIndicator").addClass("active");
 
-        $collection.findOne({
-          _id: $stateParams.id
-        }, (err, result) => {
-          $timeout(() => {
-            $scope.data = result;
-
-            if ($scope.afterLoad) {
-              $scope.afterLoad($scope.data);
-            }
-
+        $collection.findOne(
+          {
+            _id: $stateParams.id
+          },
+          (err, result) => {
             $timeout(() => {
-              $('.ui.dropdown').dropdown();
-              $('.ui.loadingIndicator').removeClass('active');
-            }, 100);
-          }, 0);
-        });
+              $scope.data = result;
+
+              if ($scope.afterLoad) {
+                $scope.afterLoad($scope.data);
+              }
+
+              $timeout(() => {
+                $(".ui.dropdown").dropdown();
+                $(".ui.loadingIndicator").removeClass("active");
+              }, 100);
+            }, 0);
+          }
+        );
       }
     }, 0);
 
@@ -99,13 +116,24 @@ export default class FormController extends BaseController {
     };
 
     $scope.numberToWord = number => {
-      const numbers = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+      const numbers = [
+        "one",
+        "two",
+        "three",
+        "four",
+        "five",
+        "six",
+        "seven",
+        "eight",
+        "nine",
+        "ten"
+      ];
 
-      return numbers[(number % 10) - 1];
+      return numbers[number % 10 - 1];
     };
 
     $scope.save = () => {
-      if (!$('#form').form('is valid')) {
+      if (!$("#form").form("is valid")) {
         return;
       }
 
@@ -115,9 +143,9 @@ export default class FormController extends BaseController {
         }, 0);
 
         swal({
-          title: 'Sucesso!',
-          text: 'Registro salvo com sucesso!',
-          icon: 'success'
+          title: "Sucesso!",
+          text: "Registro salvo com sucesso!",
+          icon: "success"
         }).then(() => {
           $state.go($parentScreen);
         });
@@ -126,38 +154,44 @@ export default class FormController extends BaseController {
       if (!$scope.data._id) {
         $collection.insert($scope.data, successCallback);
       } else {
-        $collection.update({_id: $scope.data._id}, $scope.data, successCallback);
+        $collection.update(
+          { _id: $scope.data._id },
+          $scope.data,
+          successCallback
+        );
       }
     };
 
     $scope.delete = () => {
       swal({
-        title: 'Você tem certeza?',
-        text: 'Esta ação não poderá ser desfeita!',
-        icon: 'warning',
+        title: "Você tem certeza?",
+        text: "Esta ação não poderá ser desfeita!",
+        icon: "warning",
         buttons: {
           cancel: {
-            text: 'Cancelar',
+            text: "Cancelar",
             value: null,
             visible: true,
             closeModal: true
           },
           confirm: {
-            text: 'Sim, deletar!',
+            text: "Sim, deletar!",
             value: true,
             visible: true,
             closeModal: false
           }
         }
-      }).then((willDelete) => {
+      }).then(willDelete => {
         if (willDelete) {
-          $collection.remove({_id: $scope.data._id}, err => {
+          $collection.remove({ _id: $scope.data._id }, err => {
             if (err) {
-              swal('Erro!', 'Ocorreu um erro.', 'error');
+              swal("Erro!", "Ocorreu um erro.", "error");
             } else {
-              swal('Deletado!', 'O registro foi deletado.', 'success').then(() => {
-                $scope.doSearch();
-              });
+              swal("Deletado!", "O registro foi deletado.", "success").then(
+                () => {
+                  $scope.doSearch();
+                }
+              );
             }
           });
         }

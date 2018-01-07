@@ -1,47 +1,48 @@
 body {
-	background: -webkit-linear-gradient(top, #dcdfe5 0%, #dcdfe5 100%);
+  background: -webkit-linear-gradient(top, #dcdfe5 0%, #dcdfe5 100%);
 }
 
 .topMenu {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 45px;
-	background-color: #3a3d3f;
-    -webkit-app-region: drag;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 45px;
+  background-color: #3a3d3f;
+  -webkit-app-region: drag;
 }
 
 .topMenu .right.menu {
-    -webkit-app-region: no-drag;
+  -webkit-app-region: no-drag;
 }
 
 .sideMenu {
-	position: fixed;
-	top: 45px;
-	left: 0;
-	width: 210px;
-	bottom: 0;
-	background-color: #3a3d3f;
+  position: fixed;
+  top: 45px;
+  left: 0;
+  width: 210px;
+  bottom: 0;
+  background-color: #3a3d3f;
 }
 
-.topMenu .ui.menu, .sideMenu .ui.menu {
-	border-color: #3a3d3f !important;
+.topMenu .ui.menu,
+.sideMenu .ui.menu {
+  border-color: #3a3d3f !important;
 }
 
 .contentContainer {
-	position: absolute;
-	top: 45px;
-	left: 210px;
-	right: 0;
-	bottom: 0;
-	overflow: auto;
+  position: absolute;
+  top: 45px;
+  left: 210px;
+  right: 0;
+  bottom: 0;
+  overflow: auto;
 }
 
 .contentContainerInner {
-	padding: 50px;
+  padding: 50px;
 }
 
 #mapContainer .active {
-	fill: blue !important;
+  fill: blue !important;
 }
